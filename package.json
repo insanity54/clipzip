@@ -1,0 +1,30 @@
+{
+  "name": "clipzip",
+  "version": "0.0.1",
+  "description": "Generates a video composed of top twitch clips from a channel",
+  "main": "clipzip.js",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "dotenv": "^8.2.0",
+    "luxon": "^1.25.0",
+    "twitch": "^4.2.7",
+    "twitch-auth": "^4.2.7",
+    "yargs": "^16.1.0",
+    "youtube-dl": "^3.0.2",
+    "youtube-dl-wrap": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/insanity54/clipzip.git"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://gitlab.com/insanity54/clipzip/issues"
+  },
+  "homepage": "https://gitlab.com/insanity54/clipzip#readme"
+}
