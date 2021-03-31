@@ -4,8 +4,12 @@
   "description": "Generates a video composed of top twitch clips from a channel",
   "main": "clipzip.js",
   "dependencies": {
+    "@grimtech/envimport": "^0.0.1",
     "bluebird": "^3.7.2",
     "dotenv": "^8.2.0",
+    "editly": "^0.11.0",
+    "ffprobe": "^1.1.2",
+    "globby": "^11.0.1",
     "luxon": "^1.25.0",
     "twitch": "^4.2.7",
     "twitch-auth": "^4.2.7",
@@ -15,7 +19,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node clipzip"
   },
   "repository": {
     "type": "git",
