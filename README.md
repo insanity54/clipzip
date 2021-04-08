@@ -26,6 +26,11 @@ cd ./node_modules/gl
 node-gyp rebuild --verbose
 ```
 
+or
+
+`npm rebuild --build-from-source gl`
+
+
 for more details, see https://github.com/stackgl/headless-gl/issues/65
 
 

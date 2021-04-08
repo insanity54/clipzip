@@ -1,26 +1,53 @@
 {
+  "engines": {
+    "node": "^14.16.0"
+  },
   "name": "clipzip",
   "version": "0.0.1",
   "description": "Generates a video composed of top twitch clips from a channel",
   "main": "clipzip.js",
   "dependencies": {
+    "@google-cloud/local-auth": "^1.0.1",
     "@grimtech/envimport": "^0.0.1",
     "bluebird": "^3.7.2",
     "dotenv": "^8.2.0",
-    "editly": "^0.11.0",
+    "editly": "^0.11.1",
+    "execa": "^5.0.0",
+    "express": "^4.17.1",
     "ffprobe": "^1.1.2",
     "globby": "^11.0.1",
+    "google-auth-library": "^7.0.3",
+    "googleapis": "^70.0.0",
+    "jest-canvas-mock": "^2.3.1",
+    "knex": "^0.95.4",
     "luxon": "^1.25.0",
+    "node-schedule": "^2.0.0",
+    "normalize-volume": "^1.0.7",
+    "opn": "^6.0.0",
+    "passport": "^0.4.1",
+    "passport-youtube-v3": "^2.1.0",
+    "pg-promise": "^10.9.5",
+    "pug": "^3.0.2",
+    "server-destroy": "^1.0.1",
+    "sqlite3": "^5.0.2",
     "twitch": "^4.2.7",
     "twitch-auth": "^4.2.7",
     "yargs": "^16.1.0",
+    "youtube-api": "^3.0.1",
     "youtube-dl": "^3.0.2",
     "youtube-dl-wrap": "^1.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node clipzip"
+    "start": "node index",
+    "outro": "npx editly outro.json5",
+    "dev": "",
+    "predev": "node devdb && npx knex seed:run",
+    "seed": "npx knex seed:run",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
