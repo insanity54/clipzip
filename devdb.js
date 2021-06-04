@@ -7,6 +7,9 @@ const user = envImport('DB_USER');
 const db = envImport('DB_NAME');
 const host = envImport('DB_HOST');
 
+const PGADMIN_DEFAULT_EMAIL = envImport('PGADMIN_DEFAULT_EMAIL');
+const PGADMIN_DEFAULT_PASSWORD = envImport('PGADMIN_DEFAULT_PASSWORD');
+
 execa('docker', [
 	'run',
     '--name', 'clipzip-postgres',
@@ -19,3 +22,10 @@ execa('docker', [
     'postgres'
 ]).stdout.pipe(process.stdout);
 
+execa('docker', [
+    'run',
+    '-p', '9999:80',
+    '-e', `PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}`,
+    '-e', `PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}`,
+    'dpage/pgadmin4'
+]).stdout.pipe(process.stdout);
