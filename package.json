@@ -21,6 +21,7 @@
     "puppeteer": "^9.1.1",
     "puppeteer-extra": "^3.1.18",
     "puppeteer-extra-plugin-stealth": "^2.7.8",
+    "ramda": "^0.27.1",
     "taiko": "^1.2.3",
     "twitch": "^4.2.7",
     "twitch-auth": "^4.2.7",
