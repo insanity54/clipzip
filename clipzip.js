@@ -11,26 +11,29 @@ const Download = require('./lib/download');
 const { combineClips } = require('./lib/combine');
 const Uploader = require('./lib/upload');
 const envImport = require('@grimtech/envimport');
-const NormalizeVolume = require('normalize-volume');
 
 const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
 
-const YOUTUBE_CLIENT_ID = envImport('YOUTUBE_CLIENT_ID');
-const YOUTUBE_CLIENT_SECRET = envImport('YOUTUBE_CLIENT_SECRET');
-
-
+const Daemon = require('./lib/daemon')
 
 const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-const ul = new Uploader(YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET);
+const ul = new Uploader();
 
 const combineCommandBuilder = (yargs) => {
   return yargs
     .option('directory', {
+      required: true,
       alias: 'd',
       describe: 'Directory containing clip video files',
       nargs: 1
-    });
+    })
+    .option('outputFileName', {
+      required: true,
+      alias: 'o',
+      nargs: 1,
+      describe: 'The path & name of the created video'
+    })
 }
 
 const downloadCommandBuilder = (yargs) => {
@@ -59,21 +62,71 @@ const downloadCommandBuilder = (yargs) => {
 
 const uploadCommandBuilder = (yargs) => {
   return yargs
-    .option('youtube-channel', {
-      alias: 'yt',
-      describe: 'The youtube channel to upload the video to',
-      nargs: 1
+    .option('videoFile', {
+      describe: 'the video file to upload',
+      alias: 'v',
+      nargs: 1,
+      required: true
+    })
+    .option('channel', {
+      describe: 'The twitch channel. Must exist in vtuberData',
+      alias: 'c',
+      nargs: 1,
+      required: true
+    })
+    .option('date', {
+      describe: 'The date of the upload',
+      alias: 'd',
+      nargs: 1,
+      required: true
+    })
+}
+
+const allCommandBuilder = (yargs) => {
+  // choose a default channel. @todo implement or don't, idc
+  // const todaysChannel = () => { 
+  //   const jobs = require('./data/jobs');
+  //   const { DateTime } = require('luxon');
+  //   const today = DateTime.now().toFormat('d');
+  //   const foundJob = jobs.find((job) => {
+  //     const { schedule, channel } = job;
+  //     const cronRegex = /(\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*)/;
+  //     const scheduleDay = cronRegex.exec(schedule)[4];
+  //     return (scheduleDay === today);
+  //   })
+  //   if (typeof foundJob.channel === 'undefined') {
+  //     throw new Error('')
+  //   }
+  // }
+  return yargs
+    .option('channel', {
+      describe: 'the channel to process',
+      alias: 'c',
+      nargs: 1,
+      required: true
+    })
+}
+
+const dailyCommandBuilder = (yargs) => {
+  return yargs
+    .option('channel', {
+      describe: ''
     })
 }
 
 
-
+const allProcess = (yargs) => {
+  const { channel } = yargs;
+  const d = new Daemon({});
+  d.run(channel);
+}
 
 const arguments = yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
   .command('download', 'Download clips from Twitch channel', downloadCommandBuilder, dl.downloadVideos)
   .command('combine', 'Combine clips together to make a compilation video', combineCommandBuilder , combineClips)
   .command('upload', 'Upload the compilation video to youtube', uploadCommandBuilder , ul.upload)
+  .command('all', 'Download, Combine, then Upload', allCommandBuilder, allProcess)
   .demandCommand()
   .argv
 

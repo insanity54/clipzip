@@ -1,4 +1,4 @@
-const Daemon = require('./daemon');
+const Daemon = require('../lib/daemon');
 const { DateTime } = require('luxon');
 
 
@@ -6,7 +6,7 @@ const { DateTime } = require('luxon');
 describe('daemon', () => {
     describe('getDates', () => {
         let daemon;
-        test('getDates', () => {
+        it('getDates', () => {
             const testData = [
                 { inputDate: '2021-01-01', expectedStartDate: '2020-11-01', expectedEndDate: '2020-11-30' },
                 { inputDate: '2021-02-01', expectedStartDate: '2020-12-01', expectedEndDate: '2020-12-31' },

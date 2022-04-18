@@ -8,7 +8,10 @@ const { ApiClient } = require('twitch');
 const { ClientCredentialsAuthProvider } = require('twitch-auth')
 const authProvider = new ClientCredentialsAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
 const apiClient = new ApiClient({ authProvider });
-const Download = require('./download');
+const Download = require('../lib/download');
+const { getEventListeners } = require('events');
+const fsp = require('fs/promises');
+const AbortController = require('fast-abort-controller').default
 
 const ironmouseId = '175831187';
 const startDate = '2021-03-01';
@@ -38,8 +41,41 @@ describe('download', function () {
             const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
             const testClipInfo = { url: 'https://clips.twitch.tv/EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB' };
             const testDownloadPath = '/tmp/EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB.mp4';
-            const result = await dl.downloadVideo(testClipInfo, testDownloadPath);
-            expect(result).to.include('EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB');
+            const { filename } = await dl.downloadVideo(testClipInfo, testDownloadPath);
+            expect(filename).to.include('EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB');
+        })
+
+        it('should resolve with completionPercentage 100', async function () {
+            this.timeout(1000*60*3);
+            const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+            const testClipInfo = { url: 'https://clips.twitch.tv/EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB' };
+            const testDownloadPath = '/tmp/EnthusiasticElatedPresidentWow-b9DX_bNJOed7NOiB.mp4';
+            const { filename, completionPercentage } = await dl.downloadVideo(testClipInfo, testDownloadPath);
+            expect(completionPercentage).to.equal(100);
+        })
+
+        it('should retry when a downloaded clip is incomplete', async function () {
+            this.timeout(1000*60*3);
+            const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+            const url = 'https://www.twitch.tv/projektmelody/clip/SassyAggressiveLorisAMPEnergyCherry-Qmd0X2yoOmq3-YN1'
+            const downloadPath = '/tmp/truncated-clip.mp4';
+            try {
+                await fsp.unlink(downloadPath);
+            } catch (e) {
+                console.log('we ok')
+            }
+            const filename = await dl.downloadVideo(url, downloadPath);
+
+            // setTimeout(() => {
+            //     // simulate bad network
+            //     console.log('  [A] Aborting! (Simulating bad network.)');
+            //     controller.abort();
+            //     // console.log(controller.signal)
+            //     // console.log(controller.signal.eventEmitter)
+            // }, 15000);
+
+
+            expect(filename).to.equal(downloadPath);
         })
     })
     describe('getClips', function () {

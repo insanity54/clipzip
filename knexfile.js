@@ -4,8 +4,8 @@ const envImport = require('@grimtech/envimport');
 
 module.exports = {
     development: {
-      client: 'pg',
-      connection: { user: envImport('DB_USER'), database: envImport('DB_NAME'), password: envImport('DB_PASS') },
+      client: 'sqlite3',
+      connection: { filename: './data/clipzip.sqlite' },
       seeds: {
           directory: './seeds/'
       }
