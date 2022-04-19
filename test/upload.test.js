@@ -37,6 +37,34 @@ const testDate = '2021-02-01';
 const videoIdRegex = /[\w\d-_]{11}/;
 
 describe('uploader', () => {
+  describe('getTwitterHandle', function () {
+    it('should return empty string if no twitter exists in the socialMediaLinks', function () {
+      const socialMediaLinksFixture = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      ]
+    })
+    it('should accept an array of socialMediaLinks and return a twitter handle if it exists', function () {
+      const socialMediaLinksFixture = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://ko-fi.com/cj_clippy',
+        'https://twitter.com/cj_clippy'
+      ]
+      expect(Uploader.getTwitterHandle(socialMediaLinksFixture)).to.equal('@cj_clippy')
+    })
+  })
+  describe('parseTwitterHandle', function () {
+    it('should find a twitter @ handle in a URL of any variety', function () {
+      const expectedHandle = '@ironmouse';
+      expect(Uploader.parseTwitterHandle('ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('https://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('https://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('http://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('http://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('twitter.com/ironmouse')).to.equal(expectedHandle);
+    })
+  })
   describe('upload', async function () {
     it('should return a yt video ID', async function () {
       this.timeout(1000*60*10)
