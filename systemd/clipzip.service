@@ -1,0 +1,18 @@
+[Unit]
+Description=Clipzip
+Documentation=https://github.com/insanity54/clipzip
+After=network.target
+
+[Service]
+Type=simple
+User=chris
+EnvironmentFile=/home/chris/.my-super-cool-env
+WorkingDirectory=/home/chris/Documents/clipzip
+
+# spawn a shell because we need access to PATH. see https://stackoverflow.com/a/26249980/1004931
+ExecStart=/bin/bash -c '/home/chris/.nvm/versions/node/v14.16.0/bin/node /home/chris/Documents/clipzip/index'
+#ExecStart=xterm -e node clipzip.js all
+#ExecStart=node index
+
+
+Restart=on-failure

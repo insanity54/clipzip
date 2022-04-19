@@ -37,6 +37,35 @@ const testDate = '2021-02-01';
 const videoIdRegex = /[\w\d-_]{11}/;
 
 describe('uploader', () => {
+
+  describe('getTwitterHandle', function () {
+    it('should return empty string if no twitter exists in the socialMediaLinks', function () {
+      const socialMediaLinksFixture = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      ]
+    })
+    it('should accept an array of socialMediaLinks and return a twitter handle if it exists', function () {
+      const socialMediaLinksFixture = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://ko-fi.com/cj_clippy',
+        'https://twitter.com/cj_clippy'
+      ]
+      expect(Uploader.getTwitterHandle(socialMediaLinksFixture)).to.equal('@cj_clippy')
+    })
+  })
+  describe('parseTwitterHandle', function () {
+    it('should find a twitter @ handle in a URL of any variety', function () {
+      const expectedHandle = '@ironmouse';
+      expect(Uploader.parseTwitterHandle('ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('https://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('https://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('http://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('http://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(Uploader.parseTwitterHandle('twitter.com/ironmouse')).to.equal(expectedHandle);
+    })
+  })
   describe('upload', async function () {
     it('should return a yt video ID', async function () {
       this.timeout(1000*60*10)
@@ -77,6 +106,18 @@ describe('uploader', () => {
       expect(data.socialMediaLinks).to.have.lengthOf.above(0);
       expect(data.socialMediaLinks[0]).to.have.property('href');
       expect(data.socialMediaLinks[0]).to.have.property('text');
+      expect(data.socialMediaLinks[0]).to.be.a('string');
+      setTimeout(() => { return }, 2000)
+    })
+    it('getVtuberData kuzuryuio', async function () {
+      this.timeout(1000*60*2)
+      const uploader = new Uploader()
+      const data = await uploader.getVtuberData('kuzuryuio', true);
+      expect(data).to.have.property('socialMediaLinks');
+      expect(data).to.have.property('displayName');
+      expect(data.displayName).to.equal('KuzuryuIo');
+      expect(data.socialMediaLinks).to.have.lengthOf.above(0);
+      expect(data.socialMediaLinks[0]).to.be.a('string');
       setTimeout(() => { return }, 2000)
     })
     it('getVtuberData apricot', async function () {
@@ -89,6 +130,18 @@ describe('uploader', () => {
       expect(data.socialMediaLinks).to.have.lengthOf.above(0);
       expect(data.socialMediaLinks[0]).to.have.property('href');
       expect(data.socialMediaLinks[0]).to.have.property('text');
+      expect(data.socialMediaLinks[0]).to.be.a('string');
+      setTimeout(() => { return }, 2000)
+    })
+    it('getVtuberData zentreya', async function () {
+      this.timeout(1000*60*2)
+      const uploader = new Uploader()
+      const data = await uploader.getVtuberData('zentreya', true);
+      expect(data).to.have.property('socialMediaLinks');
+      expect(data).to.have.property('displayName');
+      expect(data.displayName).to.equal('Zentreya');
+      expect(data.socialMediaLinks).to.have.lengthOf.above(0);
+      expect(data.socialMediaLinks[0]).to.be.a('string');
       setTimeout(() => { return }, 2000)
     })
   })

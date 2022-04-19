@@ -83,21 +83,6 @@ const uploadCommandBuilder = (yargs) => {
 }
 
 const allCommandBuilder = (yargs) => {
-  // choose a default channel. @todo implement or don't, idc
-  // const todaysChannel = () => { 
-  //   const jobs = require('./data/jobs');
-  //   const { DateTime } = require('luxon');
-  //   const today = DateTime.now().toFormat('d');
-  //   const foundJob = jobs.find((job) => {
-  //     const { schedule, channel } = job;
-  //     const cronRegex = /(\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*) (\d+|\*)/;
-  //     const scheduleDay = cronRegex.exec(schedule)[4];
-  //     return (scheduleDay === today);
-  //   })
-  //   if (typeof foundJob.channel === 'undefined') {
-  //     throw new Error('')
-  //   }
-  // }
   return yargs
     .option('channel', {
       describe: 'the channel to process',
