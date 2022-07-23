@@ -1,13 +1,15 @@
 
-require('dotenv').config();
-const envImport = require('@grimtech/envimport');
+const constants = require('./lib/constants');
+
 
 module.exports = {
     development: {
-      client: 'sqlite3',
-      connection: { filename: './data/clipzip.sqlite' },
+      client: 'better-sqlite3',
+      connection: { 
+        filename: constants.dbpath 
+      },
       seeds: {
           directory: './seeds/'
-      }
-    }
-}
+      },
+      useNullAsDefault: true
+}}

@@ -7,18 +7,20 @@ const path = require('path');
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 
-const Download = require('./lib/download');
-const { combineClips } = require('./lib/combine');
-const Uploader = require('./lib/upload');
+// const Download = require('./lib/download');
+// const { combineClips } = require('./lib/combine');
+// const Uploader = require('./lib/upload');
 const envImport = require('@grimtech/envimport');
+const Database = require('./lib/database');
 
 const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
 
-const Daemon = require('./lib/daemon')
+// const Daemon = require('./lib/daemon')
 
-const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-const ul = new Uploader();
+// const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+// const ul = new Uploader();
+const db = new Database();
 
 const combineCommandBuilder = (yargs) => {
   return yargs
@@ -92,10 +94,60 @@ const allCommandBuilder = (yargs) => {
     })
 }
 
-const dailyCommandBuilder = (yargs) => {
+const dbCommandBuilder = (yargs) => {
   return yargs
+    .option('init', {
+      describe: 'create the database on disk',
+      nargs: 0,
+      required: false
+    })
+    .option('create', {
+      describe: 'add a new vtuber channel to the db',
+      nargs: 0,
+      required: false
+    })
+    .option('read', {
+      describe: 'show the database contents',
+      nargs: 0,
+      required: false
+    })
+    .option('update', {
+      describe: 'update a record in the database',
+      nargs: 0,
+      required: false
+    })
+    .option('delete', {
+      describe: 'delete a record from the database',
+      nargs: 0,
+      required: false
+    })
+    .option('dom', {
+      describe: 'the day of the month on which the vtuber is scheduled',
+      alias: 'd',
+      nargs: 1,
+      required: false
+    })
+    .option('id', {
+      describe: 'ID of the vtuber in the database',
+      alias: 'i',
+      nargs: 1,
+      required: false
+    })
     .option('channel', {
-      describe: ''
+      describe: 'the channel name',
+      alias: 'c',
+      nargs: 1,
+      required: false
+    })
+    .option('blacklisted', {
+      describe: 'whether or not the vtuber channel is blacklisted',
+      nargs: 1,
+      required: false
+    })
+    .option('note', {
+      describe: 'a note to attach to the vtuber. useful to show why a vtuber was blacklisted',
+      nargs: 1,
+      required: false
     })
 }
 
@@ -108,10 +160,11 @@ const allProcess = (yargs) => {
 
 const arguments = yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
-  .command('download', 'Download clips from Twitch channel', downloadCommandBuilder, dl.downloadVideos)
-  .command('combine', 'Combine clips together to make a compilation video', combineCommandBuilder , combineClips)
-  .command('upload', 'Upload the compilation video to youtube', uploadCommandBuilder , ul.upload)
-  .command('all', 'Download, Combine, then Upload', allCommandBuilder, allProcess)
+  // .command('download', 'Download clips from Twitch channel', downloadCommandBuilder, dl.downloadVideos)
+  // .command('combine', 'Combine clips together to make a compilation video', combineCommandBuilder , combineClips)
+  // .command('upload', 'Upload the compilation video to youtube', uploadCommandBuilder , ul.upload)
+  .command('db', 'Query the database for scheduled vtuber channels', dbCommandBuilder, db.handleCli.bind(db))
+  // .command('all', 'Download, Combine, then Upload', allCommandBuilder, allProcess)
   .demandCommand()
   .argv
 
