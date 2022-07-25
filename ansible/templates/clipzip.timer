@@ -1,0 +1,8 @@
+[Unit]
+Description=Run clipzip
+
+[Timer]
+OnCalendar=*-*-* 01:00:00
+
+[Install]
+WantedBy=timers.target
