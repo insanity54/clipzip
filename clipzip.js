@@ -7,19 +7,19 @@ const path = require('path');
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 
-// const Download = require('./lib/download');
-// const { combineClips } = require('./lib/combine');
-// const Uploader = require('./lib/upload');
+const Download = require('./lib/download');
+const { combineClips } = require('./lib/combine');
+const Uploader = require('./lib/upload');
 const envImport = require('@grimtech/envimport');
 const Database = require('./lib/database');
 
 const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
 
-// const Daemon = require('./lib/daemon')
+const Daemon = require('./lib/daemon')
 
-// const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-// const ul = new Uploader();
+const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+const ul = new Uploader();
 const db = new Database();
 
 const combineCommandBuilder = (yargs) => {
@@ -160,11 +160,11 @@ const allProcess = (yargs) => {
 
 const arguments = yargs(hideBin(process.argv))
   .usage('Usage: $0 <command> [options]')
-  // .command('download', 'Download clips from Twitch channel', downloadCommandBuilder, dl.downloadVideos)
-  // .command('combine', 'Combine clips together to make a compilation video', combineCommandBuilder , combineClips)
-  // .command('upload', 'Upload the compilation video to youtube', uploadCommandBuilder , ul.upload)
+  .command('download', 'Download clips from Twitch channel', downloadCommandBuilder, dl.downloadVideos)
+  .command('combine', 'Combine clips together to make a compilation video', combineCommandBuilder , combineClips)
+  .command('upload', 'Upload the compilation video to youtube', uploadCommandBuilder , ul.upload)
   .command('db', 'Query the database for scheduled vtuber channels', dbCommandBuilder, db.handleCli.bind(db))
-  // .command('all', 'Download, Combine, then Upload', allCommandBuilder, allProcess)
+  .command('all', 'Download, Combine, then Upload', allCommandBuilder, allProcess)
   .demandCommand()
   .argv
 
