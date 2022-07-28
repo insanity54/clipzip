@@ -1,6 +1,18 @@
 
 require('dotenv').config();
 const execa = require('execa');
+const { emailAdmin } = require('./lib/notifications');
+const { DateTime, Duration } = require('luxon');
+const path = require('path');
+const executable = path.join(__dirname, 'clipzip.js');
+const { combineClips } = require('./lib/combine');
+
+const execOptions = {
+    cwd: __dirname,
+    localDir: __dirname,
+    preferLocal: true,
+    stdio: 'inherit'
+};
 
 /**
  * This file is meant to be invoked once per day
@@ -13,17 +25,98 @@ const execa = require('execa');
  * 
  */
 
+function getDates (nowISODate = DateTime.now().toISODate()) {
+    const twoMonths = Duration.fromISO('P2M');
+    const oneMonth = Duration.fromISO('P1M');
+    const oneDay = Duration.fromISO('P1D');
+    const monthBeforeLast = DateTime.fromISO(nowISODate).minus(twoMonths).toObject();
+    const startDate = DateTime.fromObject({...monthBeforeLast, day: 1}).toISODate();
+    const endDate = DateTime.fromISO(startDate).plus(oneMonth).minus(oneDay).toISODate();
+    return {
+        startDate,
+        endDate
+    }
+}
+
+
+async function createCompilation (channel) {
+    console.log(`>> creatingCompilation for channel ${channel}`)
+
+    let { startDate, endDate } = getDates();
+
+    // Download the Twitch.tv channel's most viewed clips using the download module
+    console.log('>> Downloading Started')
+    await download(channel, startDate, endDate);
+    console.log('>> Downloading Finished')
+
+    // Combine clips into one video file using the combine module
+    console.log('>> Combining')
+    const videoFile = await combineClips({
+        directory: path.join(__dirname, 'data', channel, `${startDate}_${endDate}`),
+        outputFileName: path.join(__dirname, 'output', `${channel}_${startDate}_${endDate}.mp4`)
+    });
+
+    // Upload the video file to youtube using the upload module.
+    console.log('>> Uploading')
+    const uploader = new Uploader()
+    await uploader.upload({ channel, videoFile, date: startDate });
+    console.log('>> Uploading Finished')
+}
+
+async function download (channel, startDate, endDate) {
+    if (typeof channel === 'undefined') throw new Error('channel passed to download() was undefined')
+    if (typeof startDate === 'undefined') throw new Error('startDate passed to download() was undefined')
+    if (typeof endDate === 'undefined') throw new Error('endDate passed to download() was undefined')
+    console.log(`downloading channel:${channel}`);
+    let args = [
+        'download',
+        '--tv', channel,
+        '--startDate', startDate,
+        '--endDate', endDate
+    ];
+    await execa(executable, args, execOptions);
+}
+
 async function main () {
     const dom = new Date().getDate();
     const res = await execa('./clipzip.js', ['db', '--read', '--dom', dom])
     const vtuberData = JSON.parse(res.stdout);
 
-    for (let i = 0; i < vtuberData.length; i++) {
-        await execa()
+    const todaysVtubers = vtuberData;
+
+    for (const vtuber of todaysVtubers) {
+        const channel = vtuber['channel'];
+        await dailyTask(channel);
     }
     
-    console.log(vtuberData);
-}   
+}
 
+
+async function dailyTask (channel) {
+    try {
+        await createCompilation(channel);
+        await qualityControl(channel);
+        await emailAdmin(`${channel} compilation completed successfully.`);
+    } catch (e) {
+        // 1 strike if there are less than 10 clips
+        // (this is to remove inactive channels)
+        if (e.code === 'LTTENCLIPS') incrementStrikes(channel);
+        else {
+            console.error(e);
+            await emailAdmin(`${channel} error:${e} (${e.type})`);
+        }
+    }
+}
+
+
+async function incrementStrikes (channel) {
+    const pRead = await execa('./clipzip.js', ['db', '--read', '--channel', channel]);
+    
+    const datum = JSON.parse(pRead.stdout)[0];
+    let strikes = parseInt(datum.strikes);
+    const id = parseInt(datum.id);
+
+    const pWrite = await execa('./clipzip.js', ['db', '--update', '--id', id, '--strikes', strikes+=1]);
+}
 
 main();

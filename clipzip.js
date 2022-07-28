@@ -133,6 +133,12 @@ const dbCommandBuilder = (yargs) => {
       nargs: 1,
       required: false
     })
+    .option('strikes', {
+      describe: 'strikes that the vtuber has',
+      alias: 's',
+      nargs: 1,
+      required: false
+    })
     .option('channel', {
       describe: 'the channel name',
       alias: 'c',
