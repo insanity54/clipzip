@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 require('dotenv').config();
 const execa = require('execa');
@@ -83,6 +84,7 @@ async function main () {
     const vtuberData = JSON.parse(res.stdout);
 
     const todaysVtubers = vtuberData;
+    console.log(`todaysVtubers: ${JSON.stringify(todaysVtubers)}`)
 
     for (const vtuber of todaysVtubers) {
         const channel = vtuber['channel'];
