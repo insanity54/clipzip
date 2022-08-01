@@ -7,6 +7,8 @@ const { DateTime, Duration } = require('luxon');
 const path = require('path');
 const executable = path.join(__dirname, 'clipzip.js');
 const { combineClips } = require('./lib/combine');
+const Uploader = require('./lib/upload');
+
 
 const execOptions = {
     cwd: __dirname,
@@ -58,8 +60,8 @@ async function createCompilation (channel) {
     });
 
     // Upload the video file to youtube using the upload module.
-    console.log('>> Uploading')
-    const uploader = new Uploader()
+    console.log('>> Uploading');
+    const uploader = new Uploader();
     await uploader.upload({ channel, videoFile, date: startDate });
     console.log('>> Uploading Finished')
 }
