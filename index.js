@@ -8,6 +8,7 @@ const path = require('path');
 const executable = path.join(__dirname, 'clipzip.js');
 const { combineClips } = require('./lib/combine');
 const Uploader = require('./lib/upload');
+const envImport = require('@grimtech/envimport');
 
 const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
