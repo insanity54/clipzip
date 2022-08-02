@@ -9,6 +9,7 @@ const executable = path.join(__dirname, 'clipzip.js');
 const { combineClips } = require('./lib/combine');
 const Uploader = require('./lib/upload');
 const envImport = require('@grimtech/envimport');
+const Download = require('./lib/download');
 
 const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
@@ -52,12 +53,12 @@ async function createCompilation (channel) {
     let { startDate, endDate } = getDates();
 
     // Download the Twitch.tv channel's most viewed clips using the download module
-    console.log('>> Downloading Started')
+    console.log('>> Downloading Started');
 
     const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
     await dl.downloadVideos(channel, startDate, endDate);
 
-    console.log('>> Downloading Finished')
+    console.log('>> Downloading Finished');
 
     // Combine clips into one video file using the combine module
     console.log('>> Combining')
@@ -126,7 +127,7 @@ async function dailyTask (channel) {
     } catch (e) {
         // 1 strike if there are less than 10 clips
         // (this is to remove inactive channels)
-        console.log(`  INDEX.JS CAN SEE THE FOLLOWING ERROR CODE-->${e.code}`);
+        console.log(`  INDEX.JS CAN SEE THE FOLLOWING ERROR CODE--> ${e.code}`);
         if (e.code === 'LTTENCLIPS') incrementStrikes(channel);
         else {
             console.error(e);
