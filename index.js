@@ -9,6 +9,9 @@ const executable = path.join(__dirname, 'clipzip.js');
 const { combineClips } = require('./lib/combine');
 const Uploader = require('./lib/upload');
 
+const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
+const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
+
 
 const execOptions = {
     cwd: __dirname,
@@ -49,7 +52,10 @@ async function createCompilation (channel) {
 
     // Download the Twitch.tv channel's most viewed clips using the download module
     console.log('>> Downloading Started')
-    await download(channel, startDate, endDate);
+
+    const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+    await dl.downloadVideos(channel, startDate, endDate);
+
     console.log('>> Downloading Finished')
 
     // Combine clips into one video file using the combine module
@@ -66,19 +72,6 @@ async function createCompilation (channel) {
     console.log('>> Uploading Finished')
 }
 
-async function download (channel, startDate, endDate) {
-    if (typeof channel === 'undefined') throw new Error('channel passed to download() was undefined')
-    if (typeof startDate === 'undefined') throw new Error('startDate passed to download() was undefined')
-    if (typeof endDate === 'undefined') throw new Error('endDate passed to download() was undefined')
-    console.log(`downloading channel:${channel}`);
-    let args = [
-        'download',
-        '--tv', channel,
-        '--startDate', startDate,
-        '--endDate', endDate
-    ];
-    await execa(executable, args, execOptions);
-}
 
 async function main () {
     const dom = new Date().getDate();
