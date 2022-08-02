@@ -96,6 +96,34 @@ async function main () {
 }
 
 
+/**
+ * # Quality Control
+ * 
+ * ## The problem
+ * 
+ * There are so many VTubers, and I only have so much compute time to render videos.
+ * 
+ * 
+ * ## The solution
+ * 
+ * QC removes VTubers who don't meet a set of standards 3 months in a row.
+ * A QC Strike is given if a standard is not met.
+ * Strikes reset if QC runs with all standards met.
+ * 
+ * 
+ * ### What are the conditions for a QC strike?
+ * 
+ *   * Vtubers with fewer than 10 clips (not enough clips for a compilation)
+ *   * Inactive VTubers (hiatus, gratuated, retired, etc.)
+ *   * Vtubers who clip themselves more than their audience does
+ * 
+ * 
+ */
+async function qualityControl (channel) {
+    console.log('  [*] QUALITY CONTROL @todo implement');
+}
+
+
 async function dailyTask (channel) {
     try {
         await createCompilation(channel);
@@ -104,6 +132,7 @@ async function dailyTask (channel) {
     } catch (e) {
         // 1 strike if there are less than 10 clips
         // (this is to remove inactive channels)
+        console.log(`  INDEX.JS CAN SEE THE FOLLOWING ERROR CODE-->${e.code}`);
         if (e.code === 'LTTENCLIPS') incrementStrikes(channel);
         else {
             console.error(e);
