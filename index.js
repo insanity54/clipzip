@@ -56,7 +56,7 @@ async function createCompilation (channel) {
     console.log('>> Downloading Started');
 
     const dl = new Download(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-    await dl.downloadVideos(channel, startDate, endDate);
+    await dl.downloadVideos({twitchChannel: channel, startDate, endDate});
 
     console.log('>> Downloading Finished');
 
