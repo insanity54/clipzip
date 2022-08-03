@@ -31,7 +31,7 @@ $ ./clipzip.js upload --videoFile /home/chris/Documents/clipzip/output/841289348
 
 ### Daily run
 
-    `npm run start`
+    npm run start
 
 
 ## Troubleshooting
