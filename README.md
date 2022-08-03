@@ -14,6 +14,7 @@ Generates a video composed of top twitch clips from a channel
   * libglew-dev
   * pkg-config
   * libx11-dev
+  * sqlite3
   * xserver-xorg-dev (maybe?)
   * libxext-dev (maybe?)
 
@@ -28,13 +29,9 @@ $ ./clipzip.js upload --videoFile /home/chris/Documents/clipzip/output/841289348
 ```
 (Absolute paths are required for the combine command)
 
-### Daemon
+### Daily run
 
-    npm run start
-
-#### Configuration
-
-See ./data/jobs.json
+    `npm run start`
 
 
 ## Troubleshooting
@@ -61,34 +58,20 @@ for more details, see https://github.com/stackgl/headless-gl/issues/65
 
 ## Upload Schedule
 
-Schedule is defined via crontab as follows
+Compilation schedule is defined via sqlite. "dom" represents the day of month when the channel will be clipped
 
 ```
-
-0 11 1 * * /home/chris/Documents/clipzip/cronhelper.sh projektmelody
-0 17 1 * * /home/chris/Documents/clipzip/cronhelper.sh maia
-0 8 2 * * /home/chris/Documents/clipzip/cronhelper.sh miyunebun
-0 10 2 * * /home/chris/Documents/clipzip/cronhelper.sh pokeypokums
-0 11 4 * * /home/chris/Documents/clipzip/cronhelper.sh zentreya
-0 11 5 * * /home/chris/Documents/clipzip/cronhelper.sh kuzuryuio
-0 11 6 * * /home/chris/Documents/clipzip/cronhelper.sh ohpaipansuu
-0 11 7 * * /home/chris/Documents/clipzip/cronhelper.sh girl_dm_
-0 11 8 * * /home/chris/Documents/clipzip/cronhelper.sh silvervale
-0 11 9 * * /home/chris/Documents/clipzip/cronhelper.sh nyanners
-0 11 10 * * /home/chris/Documents/clipzip/cronhelper.sh snuffy
-0 11 11 * * /home/chris/Documents/clipzip/cronhelper.sh bunny_gif
-0 11 12 * * /home/chris/Documents/clipzip/cronhelper.sh ironmouse
-0 11 13 * * /home/chris/Documents/clipzip/cronhelper.sh apricot
-0 11 14 * * /home/chris/Documents/clipzip/cronhelper.sh natsumi_moe
-0 11 15 * * /home/chris/Documents/clipzip/cronhelper.sh lumituber
-0 11 16 * * /home/chris/Documents/clipzip/cronhelper.sh hikarustation
-0 11 17 * * /home/chris/Documents/clipzip/cronhelper.sh yuikaichan
-0 11 18 * * /home/chris/Documents/clipzip/cronhelper.sh harukakaribu
-0 11 19 * * /home/chris/Documents/clipzip/cronhelper.sh momotexx
-0 11 20 * * /home/chris/Documents/clipzip/cronhelper.sh rummybear420
-0 11 21 * * /home/chris/Documents/clipzip/cronhelper.sh xpinky_purin
-0 11 22 * * /home/chris/Documents/clipzip/cronhelper.sh hajime
-0 11 23 * * /home/chris/Documents/clipzip/cronhelper.sh coqui_monster
-0 11 24 * * /home/chris/Documents/clipzip/cronhelper.sh rummybear420
-
+$ ./clipzip.js db --create --channel ironmouse
+[
+  {
+    "id": 408,
+    "channel": "ironmouse",
+    "dom": 19,
+    "strikes": 0,
+    "blacklisted": 0,
+    "note": "",
+    "createdAt": "Fri Jul 22 2022 19:02:01 GMT-0700 (Pacific Daylight Time)",
+    "updatedAt": "Fri Jul 22 2022 19:02:01 GMT-0700 (Pacific Daylight Time)"
+  }
+]
 ```
