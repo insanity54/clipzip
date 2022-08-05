@@ -82,7 +82,7 @@ async function main () {
     const vtuberData = JSON.parse(res.stdout);
 
     const todaysVtubers = vtuberData;
-    console.log(`todaysVtubers: ${JSON.stringify(todaysVtubers)}`)
+    console.log(`todaysVtubers: ${JSON.stringify(todaysVtubers.map((v)=>v.channel))}`)
 
     for (const vtuber of todaysVtubers) {
         const channel = vtuber['channel'];
