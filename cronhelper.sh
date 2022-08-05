@@ -17,7 +17,7 @@ do
 
 
 	echo "the channel is ${channel} and we are at path ${PWD}"
-	xterm -e "node ./clipzip.js all -c ${channel}"
+	xterm -e "node ./index.js"
 
 	# jenk way of running in the other possible DISPLAY
 	# in the case that DISPLAY :1 was not the correct desktop
@@ -25,10 +25,8 @@ do
 	# one of :0 or :1 but most likely :1
 	if [[ $? -ne 0 ]]; then
 		echo "LUL, the display is not ${DISPLAY} today."
-		DISPLAY=:0 xterm -e "node ./clipzip.js all -c ${channel}"
+		DISPLAY=:0 xterm -e "node ./index.js"
 	fi
-
-	#node ./clipzip.js all -c "${channel}"
 done
 
 
