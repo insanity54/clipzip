@@ -1,0 +1,11 @@
+[Unit]
+Description=Clipzip
+Documentation=https://github.com/insanity54/clipzip
+After=network.target
+
+[Service]
+Type=simple
+User={{user}}
+WorkingDirectory=/home/{{user}}/Documents/clipzip
+ExecStart=node index
+Restart=never

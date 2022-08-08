@@ -1,2 +1,22 @@
 ---
 # tasks file for clipzip
+
+- name: Install system service
+  ansible.builtin.template:
+    src: clipzip.service.j2
+    dest: /etc/systemd/system/clipzip.service
+    owner: root
+    group: root
+    mode: '0755'
+  handlers:
+    - restart clipzip
+
+- name: Install systemd timer
+  ansible.builtin.template:
+    src: clipzip.timer.j2
+    dest: /etc/systemd/system/clipzip.timer
+    owner: root
+    group: root
+    mode: '0755'
+  handlers:
+    - restart clipzip
