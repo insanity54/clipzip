@@ -72,7 +72,7 @@ async function createCompilation (channel) {
     console.log('>> Uploading');
     const uploader = new Uploader();
     await uploader.upload({ channel, videoFile, date: startDate });
-    console.log('>> Uploading Finished')
+    console.log('>> Uploading Finished');
 }
 
 
@@ -121,4 +121,6 @@ async function incrementStrikes (channel) {
     const pWrite = await execa('./clipzip.js', ['db', '--update', '--id', id, '--strikes', strikes+=1]);
 }
 
+console.log(`NODE is version ${process.version}`);
 main();
+//console.log('IMA FAKE RUNNING!')

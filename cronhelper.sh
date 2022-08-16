@@ -6,8 +6,7 @@ cd "${bindir}"
 
 
 
-echo "the channel is ${channel} and we are at path ${PWD}"
-xterm -e "node ./index.js"
+gnome-terminal "node ./index.js"
 
 # jenk way of running in the other possible DISPLAY
 # in the case that DISPLAY :1 was not the correct desktop

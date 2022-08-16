@@ -75,3 +75,10 @@ $ ./clipzip.js db --create --channel ironmouse
   }
 ]
 ```
+
+
+## YT channels to clip
+
+Once I add YT I could add these
+
+  * 
