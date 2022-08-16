@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 require('dotenv').config();
 const execa = require('execa');
@@ -62,7 +61,7 @@ async function createCompilation (channel) {
     console.log('>> Downloading Finished');
 
     // Combine clips into one video file using the combine module
-    console.log('>> Combining')
+    console.log('>> Combining');
     const videoFile = await combineClips({
         directory: path.join(__dirname, 'data', channel, `${startDate}_${endDate}`),
         outputFileName: path.join(__dirname, 'output', `${channel}_${startDate}_${endDate}.mp4`)

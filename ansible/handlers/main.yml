@@ -1,8 +1,22 @@
 ---
 # handlers file for clipzip
 
-- name: restart clipzip
+- name: reload systemd
+  become: no
   ansible.builtin.systemd:
-    state: restarted
     daemon_reload: yes
-    name: clipzip
+    scope: user
+
+- name: enable clipzip
+  become: no
+  ansible.builtin.systemd:
+    enabled: yes
+    name: clipzip.timer
+    scope: user
+
+- name: start timer
+  become: no
+  ansible.builtin.systemd:
+    state: started
+    name: clipzip.timer
+    scope: user
