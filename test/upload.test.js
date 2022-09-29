@@ -7,7 +7,7 @@ const YOUTUBE_CLIENT_ID = envImport('YOUTUBE_CLIENT_ID');
 const YOUTUBE_CLIENT_SECRET = envImport('YOUTUBE_CLIENT_SECRET');
 const PORT = envImport('PORT');
 const expect = require('chai').expect;
-
+const { parseTwitterHandle } = require('../lib/socialMedia');
 
 const vtuberData = { 
   name: 'ironmouse', 
@@ -56,14 +56,18 @@ describe('uploader', () => {
   describe('parseTwitterHandle', function () {
     it('should find a twitter @ handle in a URL of any variety', function () {
       const expectedHandle = '@ironmouse';
-      expect(Uploader.parseTwitterHandle('ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('@ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('https://twitter.com/ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('https://twitter.com/@ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('http://twitter.com/ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('http://twitter.com/@ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('twitter.com/@ironmouse')).to.equal(expectedHandle);
-      expect(Uploader.parseTwitterHandle('twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('@ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('https://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('https://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('http://twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('http://twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('twitter.com/@ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('twitter.com/ironmouse')).to.equal(expectedHandle);
+    })
+    it('should strip out query parameters that streamers might have put there', function () {
+      const expectedHandle = '@kaiourachu';
+      expect(parseTwitterHandle('https://twitter.com/intent/user?screen_name=kaiourachu')).to.equal(expectedHandle);
     })
   })
   describe('upload', async function () {

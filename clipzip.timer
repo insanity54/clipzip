@@ -1,0 +1,8 @@
+[Unit]
+Description=Run clipzip eryday
+
+[Timer]
+OnCalendar=*-*-* 8:40
+
+[Install]
+WantedBy=timers.target
