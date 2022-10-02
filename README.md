@@ -2,6 +2,8 @@
 
 Generates a video composed of top twitch clips from a channel
 
+![](https://github.com/insanity54/clipzip/blob/bfcb8e7e71229ce4ef7d84b26aa5a8e168eb1dfd/clipzip-screenshot.png)
+
 ## Dependencies
 
   * youtube-dl
@@ -75,10 +77,3 @@ $ ./clipzip.js db --create --channel ironmouse
   }
 ]
 ```
-
-
-## YT channels to clip
-
-Once I add YT I could add these
-
-  * 
