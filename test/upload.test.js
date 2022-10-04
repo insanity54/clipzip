@@ -21,15 +21,9 @@ const vtuberData = {
 };
 
 const socialMediaLinks = [
-  {
-    href: 'https://www.youtube.com/c/ApricottheLichVS',
-    text: 'Youtube'
-  },
-  { href: 'https://twitter.com/LichVtuber', text: 'Twitter' },
-  {
-    href: 'https://www.youtube.com/c/ApricottheLichTwitchArchive',
-    text: 'Twitch Archive'
-  }
+  'https://www.youtube.com/c/ApricottheLichVS',
+  'https://twitter.com/LichVtuber',
+  'https://www.youtube.com/c/ApricottheLichTwitchArchive'
 ];
 
 const testVideo = path.join(__dirname, '..', 'output', '1617878726815.mp4');
@@ -79,11 +73,12 @@ describe('uploader', () => {
     });
   })
   describe('generateVideoDescription', function () {
-    it('should show a nice output with a bulleted list', function () {
+    this.timeout(30*1000)
+    it('should tag the vtuber\'s YT channel, if there is a yt channel in the data.', async function () {
       const uploader = new Uploader();
-      const output = uploader.generateVideoDescription('apricot', socialMediaLinks);
-      console.log(output);
-      expect(output).to.match(/  \* https:\/\/www\.youtube\.com\/c\/ApricottheLichTwitchArchive/)
+      const output = await uploader.generateVideoDescription('apricot', socialMediaLinks);
+      expect(output).to.match(/  \* @Apricot the Lich\n/);
+      expect(output).to.match(/  \* @Apricot the Lich Twitch Archive\n/);
       expect(output).to.match(/  \* https:\/\/twitch.tv\/apricot/)
     })
   })

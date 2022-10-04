@@ -11,7 +11,6 @@ const apiClient = new ApiClient({ authProvider });
 const Download = require('../lib/download');
 const { getEventListeners } = require('events');
 const fsp = require('fs/promises');
-const AbortController = require('fast-abort-controller').default
 
 
 const ironmouseId = '175831187';
