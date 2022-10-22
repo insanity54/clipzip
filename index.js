@@ -15,6 +15,21 @@ const TWITCH_CLIENT_ID = envImport('TWITCH_CLIENT_ID');
 const TWITCH_CLIENT_SECRET = envImport('TWITCH_CLIENT_SECRET');
 
 
+// greets https://stackoverflow.com/a/962890/1004931
+const shuffle = function (array) {
+    var tmp, current, top = array.length;
+
+    if(top) while(--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+    }
+
+    return array;
+}
+
+
 const execOptions = {
     cwd: __dirname,
     localDir: __dirname,
@@ -80,8 +95,15 @@ async function main () {
     const res = await execa('./clipzip.js', ['db', '--read', '--dom', dom])
     const vtuberData = JSON.parse(res.stdout);
 
-    const todaysVtubers = vtuberData;
-    console.log(`todaysVtubers: ${JSON.stringify(todaysVtubers.map((v)=>v.channel))}`)
+
+    // the vtuber data is sorted by database ID, which means we are going to process the channel by clipzip seniority.
+    // I don't want that, because there are days when I terminate clipzip because it's taking too long and using too much
+    // internet bandwidth.
+    // Instead, I want random sort, so it's not always the same channels getting clipped every month (unless they are paying me to guarantee a compilation every month)
+    const todaysVtubers = shuffle(vtuberData);
+
+
+    console.log(`todaysVtubers: ${JSON.stringify(todaysVtubers.map((v) => v.channel))}`)
 
     for (const vtuber of todaysVtubers) {
         const channel = vtuber['channel'];

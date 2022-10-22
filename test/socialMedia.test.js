@@ -17,4 +17,11 @@ describe('socialMedia', function () {
 		})
 	})
 
+	describe('getVtuberData', function () {
+		this.timeout(30*1000);
+		it('should get list of URLs that the talent has put on their Twitch about page', async function () {
+			
+		})
+	})
+
 });
