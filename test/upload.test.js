@@ -58,6 +58,8 @@ describe('uploader', () => {
       expect(parseTwitterHandle('http://twitter.com/@ironmouse')).to.equal(expectedHandle);
       expect(parseTwitterHandle('twitter.com/@ironmouse')).to.equal(expectedHandle);
       expect(parseTwitterHandle('twitter.com/ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('https://www.twitter.com/intent/follow?screen_name=ironmouse')).to.equal(expectedHandle);
+      expect(parseTwitterHandle('https://twitter.com/ironmouse?s=09')).to.equal(expectedHandle);
     })
     it('should strip out query parameters that streamers might have put there', function () {
       const expectedHandle = '@kaiourachu';
