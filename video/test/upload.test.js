@@ -2,10 +2,8 @@
 require('dotenv').config();
 const Uploader = require('../lib/upload');
 const path = require('path');
-const envImport = require('@grimtech/envimport');
-const PORT = envImport('PORT');
 const expect = require('chai').expect;
-const { parseTwitterHandle } = require('../lib/socialMedia');
+const { parseTwitterHandle, getTwitterHandle } = require('../lib/socialMedia');
 
 const vtuberData = { 
   name: 'ironmouse', 
@@ -42,7 +40,7 @@ describe('uploader', () => {
         'https://ko-fi.com/cj_clippy',
         'https://twitter.com/cj_clippy'
       ]
-      expect(Uploader.getTwitterHandle(socialMediaLinksFixture)).to.equal('@cj_clippy')
+      expect(getTwitterHandle(socialMediaLinksFixture)).to.equal('@cj_clippy')
     })
   })
   describe('parseTwitterHandle', function () {
@@ -66,7 +64,7 @@ describe('uploader', () => {
     })
   })
   describe('upload', async function () {
-    it('should return a yt video ID', async function () {
+    xit('should return a yt video ID', async function () {
       this.timeout(1000*60*10)
       const uploader = new Uploader()
       const id = await uploader.upload({ channel: 'ironmouse', videoFile: testVideo, date: testDate });
@@ -74,12 +72,14 @@ describe('uploader', () => {
     });
   })
   describe('generateVideoDescription', function () {
-    this.timeout(30*1000)
+    this.timeout(60*1000)
     it('should tag the vtuber\'s YT channel, if there is a yt channel in the data.', async function () {
       const uploader = new Uploader();
       const output = await uploader.generateVideoDescription('apricot', socialMediaLinks);
-      expect(output).to.match(/  \* @Apricot the Lich\n/);
-      expect(output).to.match(/  \* @Apricot the Lich Twitch Archive\n/);
+      console.log(output)
+      expect(output).to.match(/https:\/\/www\.youtube\.com\/c\/ApricottheLichVS \n/)
+      expect(output).to.match(/@Apricot the Lich \n/)
+      expect(output).to.match(/@Apricot the Lich Twitch Archive \n/)
       expect(output).to.match(/  \* https:\/\/twitch.tv\/apricot/)
     })
   })

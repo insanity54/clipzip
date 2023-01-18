@@ -1,9 +1,0 @@
-[Unit]
-Description=Clipzip
-Documentation=https://github.com/insanity54/clipzip
-After=network.target
-
-[Service]
-Type=oneshot
-WorkingDirectory=/home/{{user}}/Documents/clipzip
-ExecStart=/bin/bash -c 'PATH=/home/chris/.nvm/versions/node/v14.17.5/bin:$PATH exec node index'

@@ -1,5 +1,4 @@
 require('dotenv').config();
-const envImport = require('@grimtech/envimport');
 const { DateTime } = require('luxon');
 const path = require('path');
 const fs = require('fs');
@@ -55,7 +54,7 @@ class Uploader {
             }
         }
 
-        const out = lines.join(' \n');
+        const out = lines.join(' \n')+' \n';
         return out;
     }
 

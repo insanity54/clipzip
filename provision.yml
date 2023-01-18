@@ -1,6 +1,0 @@
----
-
-- hosts: clipzip
-  gather_facts: no
-  roles:
-    - role: ansible
