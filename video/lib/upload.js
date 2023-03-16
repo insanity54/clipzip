@@ -70,39 +70,21 @@ class Uploader {
 
         // get vtuber metadata from twitch
 
-        console.log('>> [upload.js] channel getting metadata from twitch')
+        logger.info(`[upload.js] getting channel ${channel} metadata from twitch`)
         const vtuberData = await getVtuberData(channel);
 
-        logger.info('>> [upload.js] vtuberData is as follows.')
+        logger.info('[upload.js] vtuberData is as follows.')
         logger.info(JSON.stringify(vtuberData, 0, 2));
 
         if (vtuberData.socialMediaLinks.length === 0) logger.warn(`vtuberData.socialMediaLinks was empty. This could be that the streamer hasn't filled out their profile (unlikely), or it can be that the script is not correctly scraping the streamer links from Twitch`)
-
-        // assert existence of google API key file @todo future improvement https://github.com/insanity54/clipzip/issues/4
-        // await fsp.stat(path.join(__dirname, '..', 'oauth2.keys.json'));
 
         const twitterHandle = getTwitterHandle(vtuberData.socialMediaLinks);
         const displayName = vtuberData.displayName === '' ? channel : vtuberData.displayName;
         const name = twitterHandle === '' ? channel : twitterHandle;
 
-        console.log(`>> [upload.js] time to upload! twitterHandle:${twitterHandle}, displayName:${displayName}, name:${name}`);
+        logger.info(`[upload.js] time to upload! twitterHandle:${twitterHandle}, displayName:${displayName}, name:${name}`);
 
         const description = await this.generateVideoDescription(channel, vtuberData.socialMediaLinks);
-
-        // const videoMetadata = {
-        //     title: `10 Most Viewed ${name} Clips ${DateTime.fromISO(date).toFormat('LLLL yyyy')}`,
-        //     description: description,
-        //     tags: ['vtuber'],
-        //     privacyStatus: 'private',
-        //     madeForKids: false,
-        //     embeddable: true,
-        //     publicStatsViewable: true,
-        //     language: 'en'
-        // };
-        // const tmpMetaFile = `/tmp/video_metadata_${DateTime.now().toMillis()}.json`;
-        // fsp.writeFile(tmpMetaFile, JSON.stringify(videoMetadata), { encoding: 'utf-8' });
-
-        // return execa('youtubeuploader', ['-filename', videoFile, '-metaJSON', tmpMetaFile])
 
         return ytUploader({ 
             videoFile, 
