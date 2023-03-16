@@ -45,14 +45,6 @@ class Uploader {
         }
 
 
-        // use any yt channel links to tag the channel
-        if (ytChannels.length > 0) {
-            lines.push(''); // separate socials from YT channel tags
-            for (const href of ytChannels) {
-                const ytChannelName = await getYouTubeChannelName(href, debug.enabled);
-                lines.push(`@${ytChannelName}`);
-            }
-        }
 
         const out = lines.join(' \n')+' \n';
         return out;
